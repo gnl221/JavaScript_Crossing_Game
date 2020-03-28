@@ -18,7 +18,6 @@
     <script type="text/javascript">
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
-        var gameOver = false;
         let screenWidth = 1000;
         let screenHeight = 500;
 
@@ -52,11 +51,13 @@
 
         var player = new GameCharacter(50, 225, 50, 50, "rgb(0, 0, 255)", 0);
 
+        var prize = new GameCharacter(900, 225, 50, 50, "rgb(255,255,0)", 0);
+
         document.onkeydown = function(event){
             let keyPressed = event.keyCode;
-            if (keyPressed == 39){
+            if (keyPressed === 39){
                 player.speed = player.maxSpeed;
-            }else if(keyPressed == 37){
+            }else if(keyPressed === 37){
                 player.speed = -player.maxSpeed;
             }
         }; // 37 is left 39 is right
@@ -79,6 +80,9 @@
             ctx.fillStyle = player.color;
             ctx.fillRect(player.x, player.y, player.width, player.height);
 
+            ctx.fillStyle = prize.color;
+            ctx.fillRect(prize.x, prize.y, prize.width, prize.height);
+
             // makeChar(rectangle);
             enemies.forEach(function(element){
                 ctx.fillStyle = element.color;
@@ -95,9 +99,15 @@
         var update = function(){
             player.moveHorizontally();
 
+            if (checkCollisions(player, prize)){
+                alert("You win");
+                window.location.reload(true);
+            }
+
             enemies.forEach(function(element){
                 if (checkCollisions(player, element)){
-                    gameOver = true;
+                    alert("You Lose");
+                    window.location.reload(true);
                 }
                 element.moveVertically()
             });
@@ -105,14 +115,9 @@
         };
 
         var step = function(){
-            if (gameOver === true) {
-                alert("You Lose");
-            }else{
-                update();
-                draw();
-                window.requestAnimationFrame(step);
-            }
-
+            update();
+            draw();
+            window.requestAnimationFrame(step);
         };
 
         step();
