@@ -79,7 +79,7 @@
         }; // 37 is left 39 is right
         document.onkeyup = function(event){
             let keyUp = event.keyCode;
-            if (keyUp){
+            if (keyUp == 37 || keyUp == 39){
                 player.speed = 0;
             }
         }
