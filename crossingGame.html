@@ -53,6 +53,22 @@
 
         var prize = new GameCharacter(900, 225, 50, 50, "rgb(255,255,0)", 0);
 
+        var sprites = {};
+
+        var loadSprites = function(){
+            sprites.player = new Image();
+            sprites.player.src = "images/hero.png";
+
+            sprites.background = new Image();
+            sprites.background.src = "images/floor.png";
+
+            sprites.enemy = new Image();
+            sprites.enemy.src = "images/enemy.png";
+
+            sprites.chest = new Image();
+            sprites.chest.src = "images/chest.png";
+        }
+
         document.onkeydown = function(event){
             let keyPressed = event.keyCode;
             if (keyPressed === 39){
@@ -77,16 +93,21 @@
         var draw = function() {
             ctx.clearRect(0, 0, screenWidth, screenHeight);
 
-            ctx.fillStyle = player.color;
-            ctx.fillRect(player.x, player.y, player.width, player.height);
-
-            ctx.fillStyle = prize.color;
-            ctx.fillRect(prize.x, prize.y, prize.width, prize.height);
-
-            // makeChar(rectangle);
+            ctx.drawImage(sprites.background, 0, 0);
+            ctx.drawImage(sprites.player, player.x, player.y);
+            ctx.drawImage(sprites.chest, prize.x, prize.y);
+            // ctx.fillStyle = player.color;
+            // ctx.fillRect(player.x, player.y, player.width, player.height);
+            //
+            // ctx.fillStyle = prize.color;
+            // ctx.fillRect(prize.x, prize.y, prize.width, prize.height);
+            //
+            // // makeChar(rectangle);
             enemies.forEach(function(element){
-                ctx.fillStyle = element.color;
-                ctx.fillRect(element.x, element.y, element.width, element.height);
+                ctx.drawImage(sprites.enemy, element.x, element.y)
+
+                // ctx.fillStyle = element.color;
+                // ctx.fillRect(element.x, element.y, element.width, element.height);
             });
 
         };
@@ -100,13 +121,13 @@
             player.moveHorizontally();
 
             if (checkCollisions(player, prize)){
-                alert("You win");
+                alert("You Fucking win");
                 window.location.reload(true);
             }
 
             enemies.forEach(function(element){
                 if (checkCollisions(player, element)){
-                    alert("You Lose");
+                    alert("You Fucking Lose");
                     window.location.reload(true);
                 }
                 element.moveVertically()
@@ -119,7 +140,7 @@
             draw();
             window.requestAnimationFrame(step);
         };
-
+        loadSprites();
         step();
     </script>
 </body>
